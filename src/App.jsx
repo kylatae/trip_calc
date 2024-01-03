@@ -6,36 +6,45 @@ import dayjs from 'dayjs';
 function App() {
   const [count, setCount] = useState(0)
   const [checkDays, setCheckDays] = useState({"Su": false, "Mo": false, "Tu": false, "We": false, "Th": false, "Fr": false, "Sa": false})
-  const [startDay, setStartDay] = useState("")
+  const [rangeDay, setRangeDay] = useState({"Start": [], "End": [], "Last": [] })
   const [endDay, setEndDay] = useState("")
+  const [maxTrip, setMaxTrip] = useState(0)
   const [trips, setTrips] = useState (0)
+  
 
   function handleChange(e){
     setCheckDays({...checkDays, [e.target.id]: e.target.checked})
   }
   
   function handleStart(e){
-    setStartDay(dayjs(e.$d))
+    console.log (e)
+    setRangeDay({...rangeDay, "Start": dayjs(e.$d)})
   }
   function handleEnd(e){
-    setEndDay(dayjs(e.$d))
+    setRangeDay({...rangeDay, "End": dayjs(e.$d)})
   }
 
   const calcTrips = (e) => {
     e.preventDefault()
-
-    let tempDays = endDay.diff(startDay, 'd')
+    let tempDays = rangeDay.End.diff(rangeDay.Start, 'd')
+    let tempTrips = maxTrip
     let trips = 0
     for (let i=0; i < tempDays+1; i++)
     {
-      let thisDay = (startDay.add(i, 'day').format('dd'))
-      if(checkDays[thisDay]){
+      let thisDay = (rangeDay.Start.add(i, 'day').format('dd'))
+      if(checkDays[thisDay] && tempTrips > 1){
+        setRangeDay({...rangeDay, "Last": rangeDay.Start.add(i, 'day')})
         trips++;
+        tempTrips -= 2;      
       }
     }
 
     setTrips(trips)
 
+  }
+
+  const maxTripChange = (e) => {
+    setMaxTrip(e.target.value)
   }
 
   return (
@@ -52,11 +61,14 @@ function App() {
     <label><input id="We" onChange={handleChange} checked={checkDays.We} type="checkbox"/>Wednesday</label>
     <label><input id="Th" onChange={handleChange} checked={checkDays.Th} type="checkbox"/>Thursday</label>
     <label><input id="Fr" onChange={handleChange} checked={checkDays.Fr} type="checkbox"/>Friday</label>
-    <label><input id="Sa" onChange={handleChange} checked={checkDays.Sa} type="checkbox"/>Saturday</label>    
+    <label><input id="Sa" onChange={handleChange} checked={checkDays.Sa} type="checkbox"/>Saturday</label>  
+    <input type="text" name="maxTrip" placeholder="Max Allowed Trips (1-999)" pattern="[0-9]||[0-9]{2}||[0-9]{3}" onChange={maxTripChange}></input>
     <button>CalcTrips</button>  
     </form>
 
-    <p>Total Days {trips} and Total Trips if 2 per Day {trips*2}.</p>
+    <p>Total Appointment Days: {trips}</p>
+    <p>Total Trips (Two per Day): {trips*2}</p>
+    <p>Last Possible Trip: {dayjs(rangeDay.Last).format('MM/DD/YYYY')}</p>
     </>
   )
 }
