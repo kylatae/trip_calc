@@ -41,9 +41,9 @@ function App() {
   return (
     <>
     Start Date
-    <DatePicker label="Start" onChange={handleStart} defaultValue={dayjs('2022-04-17')} />
+    <DatePicker label="Start" onChange={handleStart} defaultValue={dayjs('2024-01-01')} />
     End Date
-    <DatePicker label="End" onChange={handleEnd} defaultValue={dayjs('2022-04-17')} />    
+    <DatePicker label="End" onChange={handleEnd} defaultValue={dayjs('2024-01-02')} />    
 
     <form onSubmit={calcTrips}>
     <label><input id="Su" onChange={handleChange} checked={checkDays.Su} type="checkbox"/>Sunday</label>
