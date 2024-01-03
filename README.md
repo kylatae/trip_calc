@@ -1,4 +1,4 @@
-# Social Network
+# Trip Calculator
   ## Description
   This was a small helper program to simply calculate how many trips (one day is two trips for back and forth travel) between two dates with set weekly appointments.
   ## Contributing
