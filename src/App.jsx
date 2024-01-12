@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 function App() {
   const [count, setCount] = useState(0)
   const [checkDays, setCheckDays] = useState({"Su": false, "Mo": false, "Tu": false, "We": false, "Th": false, "Fr": false, "Sa": false})
-  const [rangeDay, setRangeDay] = useState({"Start": [], "End": [], "Last": [] })
+  const [rangeDay, setRangeDay] = useState({"Start": dayjs(), "End": dayjs(), "Last": [] })
   const [endDay, setEndDay] = useState("")
   const [maxTrip, setMaxTrip] = useState(0)
   const [trips, setTrips] = useState (0)
@@ -26,10 +26,11 @@ function App() {
 
   const calcTrips = (e) => {
     e.preventDefault()
+    console.log (rangeDay)
     let tempDays = rangeDay.End.diff(rangeDay.Start, 'd')
     let tempTrips = maxTrip
     let trips = 0
-    for (let i=0; i < tempDays+1; i++)
+    for (let i=0; i < tempDays+2; i++)
     {
       let thisDay = (rangeDay.Start.add(i, 'day').format('dd'))
       if(checkDays[thisDay] && tempTrips > 1){
@@ -50,9 +51,9 @@ function App() {
   return (
     <>
     Start Date
-    <DatePicker label="Start" onChange={handleStart} defaultValue={dayjs('2024-01-01')} />
+    <DatePicker label="Start" onChange={handleStart} defaultValue={dayjs()} />
     End Date
-    <DatePicker label="End" onChange={handleEnd} defaultValue={dayjs('2024-01-02')} />    
+    <DatePicker label="End" onChange={handleEnd} defaultValue={dayjs()} />    
 
     <form onSubmit={calcTrips}>
     <label><input id="Su" onChange={handleChange} checked={checkDays.Su} type="checkbox"/>Sunday</label>
